@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
+import jakarta.persistence.Column;
 @Entity
 @Table(name = "projects")
 public class Project {
@@ -15,9 +15,15 @@ public class Project {
     private Long id;
 
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
-    private Double budget;
-    private String clientName;
+    @Column(name = "budget")
+private Double budget;
+   @Column(name = "client_name")
+private String clientName;
+
+@Column(name = "client_email")
+private String clientEmail;
     private String category;
 
     public Project() {
@@ -58,6 +64,13 @@ public class Project {
     public String getClientName() {
         return clientName;
     }
+    public String getClientEmail() {
+    return clientEmail;
+}
+
+public void setClientEmail(String clientEmail) {
+    this.clientEmail = clientEmail;
+}
 
     public void setClientName(String clientName) {
         this.clientName = clientName;

@@ -25,4 +25,14 @@ public class ProjectController {
 public Project getProjectById(@PathVariable Long id) {
     return projectService.getProjectById(id);
 }
+@GetMapping("/client/{email}")
+public java.util.List<Project> getProjectsByClientEmail(
+        @PathVariable String email) {
+    return projectService.getProjectsByClientEmail(email);
+}
+@DeleteMapping("/{id}")
+public String deleteProject(@PathVariable Long id) {
+    projectService.deleteProject(id);
+    return "Project deleted successfully!";
+}
 }

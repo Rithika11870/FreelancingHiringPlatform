@@ -18,7 +18,9 @@ public class User {
     private String email;
     private String password;
     private String role;
-
+    private String otp;
+    private java.time.LocalDateTime otpExpiry;
+    private boolean emailVerified = false;
     public User() {
     }
 
@@ -60,5 +62,28 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+        public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public java.time.LocalDateTime getOtpExpiry() {
+        return otpExpiry;
+    }
+
+    public void setOtpExpiry(java.time.LocalDateTime otpExpiry) {
+        this.otpExpiry = otpExpiry;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
     }
 }

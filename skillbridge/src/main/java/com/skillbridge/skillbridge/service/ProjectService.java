@@ -25,4 +25,10 @@ public class ProjectService {
     public Project getProjectById(Long id) {
         return projectRepository.findById(id).orElse(null);
     }
+    public List<Project> getProjectsByClientEmail(String email) {
+    return projectRepository.findByClientEmail(email);
 }
+      public void deleteProject(Long id) {
+    projectRepository.deleteById(id);
+}  
+    }

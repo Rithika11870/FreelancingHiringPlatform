@@ -1,4 +1,4 @@
-# FreelancingHiringPlatform
+
 # Freelancing Hiring Platform
 
 ## Project Overview
