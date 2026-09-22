@@ -67,10 +67,10 @@ public class UserService {
         return null;
     }
 
-    if (!user.getOtp().equals(otp)) {
-        System.out.println("OTP DOES NOT MATCH");
-        return null;
-    }
+   if (!user.getOtp().trim().equals(otp.trim())) {
+    System.out.println("OTP DOES NOT MATCH");
+    return null;
+}
 
     user.setEmailVerified(true);
     user.setOtp(null);

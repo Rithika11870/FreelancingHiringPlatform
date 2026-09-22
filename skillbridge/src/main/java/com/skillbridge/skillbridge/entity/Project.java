@@ -25,7 +25,7 @@ private String clientName;
 @Column(name = "client_email")
 private String clientEmail;
     private String category;
-
+private String deadline;
     public Project() {
     }
 
