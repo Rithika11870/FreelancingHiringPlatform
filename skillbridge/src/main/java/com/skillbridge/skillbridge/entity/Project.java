@@ -83,4 +83,11 @@ public void setClientEmail(String clientEmail) {
     public void setCategory(String category) {
     this.category = category;
 }
+public String getDeadline() {
+    return deadline;
+}
+
+public void setDeadline(String deadline) {
+    this.deadline = deadline;
+}
 }

@@ -60,4 +60,29 @@ public class EmailService {
 
         mailSender.send(message);
     }
+    public void sendDeadlineReminderEmail(
+        String toEmail,
+        String projectTitle,
+        String deadline,
+        long daysRemaining) {
+
+    SimpleMailMessage message = new SimpleMailMessage();
+
+    message.setTo(toEmail);
+    message.setFrom("rithuajay11@gmail.com");
+    message.setSubject("⚠️ Deadline Alert – " + projectTitle);
+
+    message.setText(
+        "Hello,\n\n"
+        + "This is a reminder for your project:\n\n"
+        + "Project: " + projectTitle + "\n"
+        + "Deadline: " + deadline + "\n"
+        + "Days Remaining: " + daysRemaining + "\n\n"
+        + "Please complete and submit your work before the deadline.\n\n"
+        + "Thank you,\n"
+        + "SkillBridge Team"
+    );
+
+    mailSender.send(message);
+}
 }
