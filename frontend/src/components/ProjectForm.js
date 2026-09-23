@@ -6,7 +6,7 @@ function ProjectForm({ onBack, user }) {
   const [description, setDescription] = useState("");
   const [budget, setBudget] = useState("");
   const [skills, setSkills] = useState("");
-
+  const [deadline, setDeadline] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -27,11 +27,11 @@ const project = {
   description,
   budget: Number(budget),
   category: skills,
+  deadline,
   clientName: user.name || "Client",
   clientEmail: user.email,
 };
-
-console.log("Project data:", project);
+console.log("Project data:", JSON.stringify(project, null, 2));
     try {
       const response = await fetch("http://localhost:8080/api/projects/add", {
         method: "POST",
@@ -105,6 +105,15 @@ console.log("Project data:", project);
                 onChange={(e) => setBudget(e.target.value)}
                 required
               />
+              <div className="form-group">
+  <label>Project Deadline</label>
+  <input
+    type="date"
+    value={deadline}
+    onChange={(e) => setDeadline(e.target.value)}
+    required
+  />
+</div>
             </div>
 
             <div className="form-group">

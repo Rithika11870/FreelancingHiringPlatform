@@ -53,4 +53,16 @@ public Application submitWork(
         @RequestParam("workLink") String workLink) {
     return applicationService.submitWork(applicationId, workLink);
 }
+@PutMapping("/{applicationId}/progress")
+public Application updateProgress(
+        @PathVariable("applicationId") Long applicationId,
+        @RequestParam("progress") Integer progress,
+        @RequestParam("progressNote") String progressNote) {
+
+    return applicationService.updateProgress(
+            applicationId,
+            progress,
+            progressNote
+    );
+}
 }

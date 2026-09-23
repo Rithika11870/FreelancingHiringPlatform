@@ -11,6 +11,9 @@ function Dashboard({ user, onPostProject }) {
   const [showProfile, setShowProfile] = useState(false);
   const [activePage, setActivePage] = useState("dashboard");
   const [showReviews, setShowReviews] = useState(false);
+  const [selectedProgressApplication, setSelectedProgressApplication] = useState(null);
+const [progressValue, setProgressValue] = useState(0);
+const [progressNote, setProgressNote] = useState("");
   const handleMyApplications = async () => {
   try {
     const response = await fetch(
@@ -628,6 +631,56 @@ useEffect(() => {
               ? "❌ Rejected"
               : application.status}
           </p>
+          {application.status === "ACCEPTED" &&
+  application.progress != null && (
+    <div className="progress-card">
+      <h4>📊 Project Progress</h4>
+
+      <div className="progress-header">
+        <strong>Progress</strong>
+        <span>{application.progress}%</span>
+      </div>
+
+      <div className="progress-bar">
+        <div
+          className="progress-fill"
+          style={{
+            width: `${application.progress}%`,
+          }}
+        ></div>
+      </div>
+
+      <p>
+        <strong>Status:</strong>{" "}
+        {application.progress === 0
+          ? "Not Started"
+          : application.progress === 100
+          ? "Completed"
+          : application.progress >= 75
+          ? "Almost Done"
+          : application.progress >= 50
+          ? "Halfway Done"
+          : "In Progress"}
+      </p>
+
+      <p>
+        <strong>Latest Update:</strong>{" "}
+        {application.progressNote || "No update available"}
+      </p>
+    </div>
+)}
+          {application.status === "ACCEPTED" && (
+  <button
+    className="dashboard-button"
+    onClick={() => {
+      setSelectedProgressApplication(application);
+      setProgressValue(application.progress || 0);
+      setProgressNote(application.progressNote || "");
+    }}
+  >
+    📊 Update Project Progress
+  </button>
+)}
 {application.status === "ACCEPTED" && (
   <button
     onClick={async () => {
@@ -656,19 +709,161 @@ useEffect(() => {
     Submit Completed Work
   </button>
 )}
-          {application.notification && (
-            <p>
-              <strong>Notification:</strong>{" "}
-              {application.notification}
-            </p>
-          )}
+      {selectedProgressApplication && (
+  <div className="progress-card">
+    <h3>📊 Update Project Progress</h3>
 
+    <h4>
+      {selectedProgressApplication.projectTitle || "Project"}
+    </h4>
+
+    <p>
+      <strong>Client:</strong>{" "}
+      {selectedProgressApplication.clientEmail}
+    </p>
+
+    <div className="progress-section">
+      <div className="progress-header">
+        <strong>Project Progress</strong>
+        <span>{progressValue}%</span>
+      </div>
+
+      <input
+        type="range"
+        min="0"
+        max="100"
+        step="5"
+        value={progressValue}
+        onChange={(e) =>
+          setProgressValue(Number(e.target.value))
+        }
+      />
+
+      <div className="progress-bar">
+        <div
+          className="progress-fill"
+          style={{ width: `${progressValue}%` }}
+        ></div>
+      </div>
+    </div>
+
+    <p>
+      <strong>Status:</strong>{" "}
+      {progressValue === 0
+        ? "Not Started"
+        : progressValue === 100
+        ? "Completed"
+        : progressValue >= 75
+        ? "Almost Done"
+        : progressValue >= 50
+        ? "Halfway Done"
+        : "In Progress"}
+    </p>
+
+    <textarea
+      placeholder="Write a progress update..."
+      value={progressNote}
+      onChange={(e) =>
+        setProgressNote(e.target.value)
+      }
+    />
+
+    <button
+      className="dashboard-button"
+      onClick={async () => {
+        if (!progressNote.trim()) {
+          alert("Please enter a progress update!");
+          return;
+        }
+
+        const response = await fetch(
+          `http://localhost:8080/api/applications/${selectedProgressApplication.id}/progress?progress=${progressValue}&progressNote=${encodeURIComponent(
+            progressNote
+          )}`,
+          {
+            method: "PUT",
+          }
+        );
+
+        if (response.ok) {
+          alert("Project progress updated successfully!");
+
+          setSelectedProgressApplication(null);
+          setProgressNote("");
+
+          handleMyApplications();
+        } else {
+          alert("Failed to update project progress!");
+        }
+      }}
+    >
+      Update Progress
+    </button>
+
+    <button
+      className="dashboard-button"
+      onClick={() => {
+        setSelectedProgressApplication(null);
+      }}
+    >
+      Cancel
+    </button>
+  </div>
+)}
+{application.rating && (
+  <div>
+    <p>
+      <strong>⭐ Client Rating:</strong>{" "}
+      {application.rating}/5
+    </p>
+
+    <p>
+      <strong>💬 Client Review:</strong>{" "}
+      {application.review || "No review available"}
+    </p>
+  </div>
+)}
          
         </div>
       ))
     )}
   </>
-)}     
+)}  
+
+  {activePage === "reviews" && (
+    <div>
+      <h3>⭐ Reviews & Ratings</h3>
+
+      {applications.filter(
+        (application) => application.rating
+      ).length === 0 ? (
+        <p>No reviews received yet.</p>
+      ) : (
+        applications
+          .filter((application) => application.rating)
+          .map((application) => (
+            <div key={application.id}>
+              <hr />
+
+              <p>
+                <strong>Project:</strong>{" "}
+                {application.projectTitle || "Project title not available"}
+              </p>
+
+              <p>
+                <strong>⭐ Client Rating:</strong>{" "}
+                {application.rating}/5
+              </p>
+
+              <p>
+                <strong>💬 Client Review:</strong>{" "}
+                {application.review || "No review available"}
+              </p>
+            </div>
+          ))
+      )}
+    </div>
+  )}
 
 {activePage === "profile" && (
   <div className="profile-box">
@@ -805,7 +1000,25 @@ useEffect(() => {
                         <strong>Category:</strong>{" "}
                         {project.category}
                       </p>
-
+                       <p>
+  <strong>Deadline:</strong>{" "}
+  {project.deadline
+    ? new Date(project.deadline).toLocaleDateString("en-IN")
+    : "Not specified"}
+</p> 
+{project.deadline &&
+  Math.ceil(
+    (new Date(project.deadline) - new Date()) /
+      (1000 * 60 * 60 * 24)
+  ) <= 3 &&
+  Math.ceil(
+    (new Date(project.deadline) - new Date()) /
+      (1000 * 60 * 60 * 24)
+  ) >= 0 && (
+    <p>
+      ⚠️ <strong>Deadline approaching!</strong>
+    </p>
+  )}
                       <button
                         onClick={() => handleApply(project)}
                       >

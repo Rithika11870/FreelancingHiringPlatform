@@ -40,7 +40,12 @@ function Sidebar({ user, activePage, onNavigate, onLogout, onPostProject }) {
             >
               📄 My Applications
             </button>
-
+<button
+  className={activePage === "reviews" ? "active" : ""}
+  onClick={() => onNavigate("reviews")}
+>
+  ⭐ Reviews & Ratings
+</button>
             <button
               className={activePage === "profile" ? "active" : ""}
               onClick={() => onNavigate("profile")}

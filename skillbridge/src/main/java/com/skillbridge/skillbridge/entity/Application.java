@@ -25,6 +25,8 @@ public class Application {
 private Integer rating;
 private String review;
 private String workLink;
+private Integer progress;
+private String progressNote;
     public Application() {
     }
 
@@ -104,6 +106,21 @@ public void setWorkLink(String workLink) {
 
 public String getProjectTitle() {
     return projectTitle;
+}
+public Integer getProgress() {
+    return progress;
+}
+
+public void setProgress(Integer progress) {
+    this.progress = progress;
+}
+
+public String getProgressNote() {
+    return progressNote;
+}
+
+public void setProgressNote(String progressNote) {
+    this.progressNote = progressNote;
 }
 
 public void setProjectTitle(String projectTitle) {

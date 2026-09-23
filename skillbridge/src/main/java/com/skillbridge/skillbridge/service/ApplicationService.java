@@ -72,4 +72,17 @@ public Application submitWork(Long applicationId, String workLink) {
 
     return applicationRepository.save(application);
 }
+public Application updateProgress(
+        Long applicationId,
+        Integer progress,
+        String progressNote) {
+
+    Application application = applicationRepository.findById(applicationId)
+            .orElseThrow(() -> new RuntimeException("Application not found"));
+
+    application.setProgress(progress);
+    application.setProgressNote(progressNote);
+
+    return applicationRepository.save(application);
+}
 }

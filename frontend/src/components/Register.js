@@ -1,6 +1,5 @@
 import "../App.css";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 function Register({ onLogin }) {
   console.log("NEW REGISTER PAGE LOADED");
   const [name, setName] = useState("");
@@ -10,6 +9,16 @@ function Register({ onLogin }) {
   const [role, setRole] = useState("FREELANCER");
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState("");
+  const [timeLeft, setTimeLeft] = useState(300);
+  useEffect(() => {
+  if (!showOtp || timeLeft <= 0) return;
+
+  const timer = setInterval(() => {
+    setTimeLeft((prev) => prev - 1);
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [showOtp, timeLeft]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -134,7 +143,11 @@ function Register({ onLogin }) {
                 onChange={(e) => setOtp(e.target.value)}
               />
             </div>
-
+<p className="otp-timer">
+  {timeLeft > 0
+    ? `OTP expires in ${String(Math.floor(timeLeft / 60)).padStart(2, "0")}:${String(timeLeft % 60).padStart(2, "0")}`
+    : "OTP Expired"}
+</p>
             <button className="main-login-btn" onClick={handleVerifyOtp}>
               Verify OTP →
             </button>
